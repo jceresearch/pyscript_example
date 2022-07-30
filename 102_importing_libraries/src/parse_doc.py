@@ -6,26 +6,28 @@ import js
 from js import document, FileReader
 from pyodide import create_proxy
 import docx
+import os
 
 
 def read_complete(event):
     # event is ProgressEvent
     # console.log('read_complete')
-    print("Create a file, read the file and print the contents:")
-    f = open("docfile.docx", "w")
 
     data = event.target.result
-    document.getElementById("content").innerHTML = data
+    filename = "./doc_to_parse.docx"
+    f1 = open(filename, "wb")
+    f1.write(data.encode())
+    document.getElementById("content").innerHTML = data.encode()
+    f1.close()
+    print(os.path.getsize(filename))
 
-    f.write(data)
-    document.getElementById("file_name").innerHTML = "docfile.docx"
-    f.close()
-    f = open("docfile.docx", "rb")
+    # f2 = open(filename, "rb")
+    import io
+
+    f = io.BytesIO(data.encode())
     wd = docx.Document(f)
-    f.close()
+    # f2.close()
     document.getElementById("content").innerHTML = wd.paragraphs[2].text
-
-    f.close()
 
 
 async def process_file(event):
@@ -42,7 +44,6 @@ async def process_file(event):
         onload_event = create_proxy(read_complete)
         reader.onload = onload_event
         reader.readAsBinaryString(f)
-        print("Setting up reader")
 
 
 def main():
