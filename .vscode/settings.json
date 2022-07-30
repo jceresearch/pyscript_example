@@ -1,0 +1,7 @@
+{
+    "python.linting.lintOnSave": false,
+    "editor.codeActionsOnSave": {},
+    "[html]": {
+        "editor.formatOnSave": false
+    }
+}
