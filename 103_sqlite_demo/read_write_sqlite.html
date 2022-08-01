@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <title>File Example</title>
+</head>
+
+<body>
+
+    <p>Reading SQLITE</p>
+
+
+    <br />
+
+    <div id="print_output"></div>
+    <br />
+
+
+    <py-env>
+        - numpy
+        - pandas
+        - matplotlib
+        - paths:
+            - src/parse_sql.py
+            - sqlite/chinook.db
+    </py-env>
+    <py-script output="print_output">
+        import sqlite3
+        from parse_sql import sql_to_df, df_to_sql
+        df=sql_to_df("chinook.db","track")
+        print(df.head())
+    </py-script>
+
+</body>
+
+</html>
