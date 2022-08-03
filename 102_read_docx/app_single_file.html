@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <title>File Example</title>
+</head>
+
+<body>
+
+    <p>This example shows how to read a docx file from the local file system , save it in the virtual file system, and display its contents</p>
+
+    
+    <br />
+
+    <br />
+    <label for="myfile">Select a file:</label>
+    <input type="file" id="myfile" name="myfile">
+    <br />
+    <br />
+    <div id="print_output"></div>
+    <br />
+    <p>File Name:</p>
+    <div style="border:2px inset #AAA;cursor:text;height:120px;overflow:auto;width:600px; resize:both">
+        <div id="file_name">
+        </div>
+    </div>
+
+
+    <p>File Content:</p>
+    <div style="border:2px inset #AAA;cursor:text;height:120px;overflow:auto;width:600px; resize:both">
+        <div id="content">
+        </div>
+    </div>
+
+    <py-env>
+        - numpy
+        - pandas
+        - matplotlib
+        - bayoo-docx
+        </py-env>
+    <py-script output="print_output">
+        
+        import asyncio
+        import js
+        from js import document, FileReader, Uint8Array
+        from pyodide import create_proxy
+        import docx
+        import os
+        import io
+
+
+        async def process_file(event):
+
+            fileList = event.target.files.to_py()
+            for f in fileList:
+                data = Uint8Array.new(await f.arrayBuffer())
+                with open("doc.docx", "wb") as outb:
+                    outb.write(bytearray(data))
+                wd = docx.Document("doc.docx")
+                document.getElementById("file_name").innerHTML = f.name
+                document.getElementById("content").innerHTML = wd.paragraphs[3].text
+
+
+        def main():
+            # Create a Python proxy for the callback function
+            # process_file() is your function to process events from FileReader
+            file_event = create_proxy(process_file)
+            # Set the listener to the callback
+            e = document.getElementById("myfile")
+            e.addEventListener("change", file_event, False)
+
+        main()
+        
+        
+    </py-script>
+
+</body>
+
+</html>
