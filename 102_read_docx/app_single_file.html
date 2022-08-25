@@ -37,6 +37,8 @@
         </div>
     </div>
 
+    <div id="download_links"></div>
+
     <py-env>
         - numpy
         - pandas
@@ -47,11 +49,12 @@
         
         import asyncio
         import js
-        from js import document, FileReader, Uint8Array
+        from js import document, FileReader, Uint8Array , console,Blob, window
         from pyodide import create_proxy
         import docx
         import os
         import io
+        from pyodide_js import FS
 
 
         async def process_file(event):
@@ -61,9 +64,18 @@
                 data = Uint8Array.new(await f.arrayBuffer())
                 with open("doc.docx", "wb") as outb:
                     outb.write(bytearray(data))
-                wd = docx.Document("doc.docx")
-                document.getElementById("file_name").innerHTML = f.name
-                document.getElementById("content").innerHTML = wd.paragraphs[3].text
+            wd = docx.Document("doc.docx")
+            document.getElementById("file_name").innerHTML = f.name
+            document.getElementById("content").innerHTML = wd.paragraphs[3].text
+            blob=Blob.new([FS.readFile("doc.docx")])
+            url = window.URL.createObjectURL(blob) 
+            element = document.createElement('a')
+            element.innerHTML = "Download file"
+            element.href = url
+            element.download = "doc.docx"
+            document.getElementById("download_links").appendChild(element)
+
+
 
 
         def main():

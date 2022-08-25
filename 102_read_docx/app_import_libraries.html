@@ -19,8 +19,10 @@
 
     <br />
     <label for="myfile">Select a file:</label>
-    <input type="file" id="myfile" name="myfile">
+    <input type="file" id="docfile" name="docfile">
     <br />
+    <label for="myfile">Select the rules file:</label>
+    <input type="file" id="rulefile" name="rulefile">
     <br />
     <div id="print_output"></div>
     <br />
@@ -37,17 +39,21 @@
         </div>
     </div>
 
+    <div id="download_links"></div>
+    
     <py-env>
         - numpy
         - pandas
         - matplotlib
         - bayoo-docx
+        - openpyxl
         - paths:
             - src/parse_doc.py
+            - src/load_doc.py
         </py-env>
     <py-script output="print_output">
-        import parse_doc
-        parse_doc.main()
+        import load_doc
+        load_doc.main()
     </py-script>
 
 </body>
