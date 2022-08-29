@@ -10,6 +10,7 @@ from docx.table import _Cell, Table, _Row
 from docx.text.paragraph import Paragraph
 from docx.enum.text import WD_COLOR_INDEX
 import pandas as pd
+import os
 
 
 def iter_block_items(parent):
@@ -55,6 +56,8 @@ def parse_doc(doc, RULE_DICT):
 
 if __name__ == "__main__":
     print("Manually executed")
+    print(os.getcwd())
+    os.chdir(os.path.dirname(__file__))
     file_ref = open("./test.docx", "rb")
     df_rules = pd.read_excel("./rules.xlsx")
     rules = df_rules.to_dict("index")
